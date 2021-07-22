@@ -38,12 +38,12 @@ public class WeatherController {
   }
 
   @RequestMapping(value = "/weatherData", method = RequestMethod.GET)
-  public String weatherData(HttpServletRequest request) throws Exception {
+  public Weather weatherData(HttpServletRequest request) throws Exception {
     String chooseData = request.getParameter("data");
 
     Weather returnData = weatherService.chooseData(chooseData);
     System.out.println("returnData : " + returnData.toString());
-
-    return returnData.toString();
+    
+    return returnData;
   }
 }

@@ -30,7 +30,7 @@
     }
 
     $(function() {
-      $('#typeSelect').on('change', function() {
+      $('#selectArea').on('change', function() {
         var dataType = $("#typeSelect option:selected").val();
         var selectDate = $("#dateSelect").val();
         var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
@@ -42,106 +42,86 @@
           contentType: "application/json; charset=utf-8",
           data : {"data" : dataTemp},
 
-          success: function (data) {
-            alert("success!!!")
+          success: function (result) {
+            drawGrid(result);
+            drawChart(result);
+            //alert(result['inputdatetime'] + "       " + result['dataType'] + "       " + result['t01']);
           },
           error: function () {
             alert("해당하는 날의 데이터가 없습니다!");
           }
         })
       })
-    }) 
-
-    $(function() {
-      $('#dateSelect').on('change', function() {
-        var dataType = $("#typeSelect option:selected").val();
-        var selectDate = $("#dateSelect").val();
-        var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
-
-        $.ajax({
-          type: "get",
-          url: "logi/weatherData",
-          dataType: "JSON",
-          contentType: "application/json; charset=utf-8",
-          data : {"data" : dataTemp},
-
-          success: function (data) {
-            alert("success!!!")
-          },
-          error: function () {
-            alert("해당하는 날의 데이터가 없습니다!");
-          }
-        })
-      })
-    }) 
+    });
 
     //<!-- Jq Grid -->
-    $(function () {
+    function drawGrid(val) {
       "use strict";
+      alert(JSON.stringify(val));
       $("#list").jqGrid({
         colModel: [
           { name: "시간" },
           { name: "온도" }
         ],
         data: [
-          { id: 10, 시간: "0시", 온도: "26" },
-          { id: 20, 시간: "1시", 온도: "25" },
-          { id: 30, 시간: "2시", 온도: "25" },
-          { id: 40, 시간: "3시", 온도: "25" },
-          { id: 50, 시간: "4시", 온도: "25" },
-          { id: 60, 시간: "5시", 온도: "25" },
-          { id: 70, 시간: "6시", 온도: "25" },
-          { id: 80, 시간: "7시", 온도: "26" },
-          { id: 90, 시간: "8시", 온도: "27" },
-          { id: 100, 시간: "9시", 온도: "28" },
-          { id: 110, 시간: "10시", 온도: "29" },
-          { id: 120, 시간: "11시", 온도: "30" },
-          { id: 130, 시간: "12시", 온도: "31" },
-          { id: 140, 시간: "13시", 온도: "31" },
-          { id: 150, 시간: "14시", 온도: "31" },
-          { id: 160, 시간: "15시", 온도: "31" },
-          { id: 170, 시간: "16시", 온도: "31" },
-          { id: 180, 시간: "17시", 온도: "30" },
-          { id: 190, 시간: "18시", 온도: "30" },
-          { id: 200, 시간: "19시", 온도: "29" },
-          { id: 210, 시간: "20시", 온도: "27" },
-          { id: 220, 시간: "21시", 온도: "26" },
-          { id: 230, 시간: "22시", 온도: "26" },
-          { id: 240, 시간: "23시", 온도: "26" }
+          { 시간: "0시", 온도: val['t00'] },
+          { 시간: "1시", 온도: val['t01'] },
+          { 시간: "2시", 온도: val['t02'] },
+          { 시간: "3시", 온도: val['t03'] },
+          { 시간: "4시", 온도: val['t04'] },
+          { 시간: "5시", 온도: val['t05'] },
+          { 시간: "6시", 온도: val['t06'] },
+          { 시간: "7시", 온도: val['t07'] },
+          { 시간: "8시", 온도: val['t08'] },
+          { 시간: "9시", 온도: val['t09'] },
+          { 시간: "10시", 온도: val['t10'] },
+          { 시간: "11시", 온도: val['t11'] },
+          { 시간: "12시", 온도: val['t12'] },
+          { 시간: "13시", 온도: val['t13'] },
+          { 시간: "14시", 온도: val['t14'] },
+          { 시간: "15시", 온도: val['t15'] },
+          { 시간: "16시", 온도: val['t16'] },
+          { 시간: "17시", 온도: val['t17'] },
+          { 시간: "18시", 온도: val['t18'] },
+          { 시간: "19시", 온도: val['t19'] },
+          { 시간: "20시", 온도: val['t20'] },
+          { 시간: "21시", 온도: val['t21'] },
+          { 시간: "22시", 온도: val['t22'] },
+          { 시간: "23시", 온도: val['t23'] }
         ]
       });
-    });
+    }
 
     //<!-- Google Chart -->
     google.load("visualization", "1", { packages: ["corechart"] });
     google.setOnLoadCallback(drawChart);
-    function drawChart() {
+    function drawChart(val) {
       var data = google.visualization.arrayToDataTable([
         ['Time', '온도'],
-        ['0시', 26],
-        ['', 25],
-        ['2시', 25],
-        ['', 25],
-        ['4시', 25],
-        ['', 25],
-        ['6시', 25],
-        ['', 26],
-        ['8시', 27],
-        ['', 28],
-        ['10시', 29],
-        ['', 30],
-        ['12시', 31],
-        ['', 31],
-        ['14시', 31],
-        ['', 31],
-        ['16시', 31],
-        ['', 30],
-        ['18시', 30],
-        ['', 29],
-        ['20시', 27],
-        ['', 26],
-        ['22시', 26],
-        ['', 26]
+        ['0시',  val['t00']],
+        ['',     val['t01']],
+        ['2시',  val['t02']],
+        ['',     val['t03']],
+        ['4시',  val['t04']],
+        ['',     val['t05']],
+        ['6시',  val['t06']],
+        ['',     val['t07']],
+        ['8시',  val['t08']],
+        ['',     val['t09']],
+        ['10시', val['t10']],
+        ['',     val['t11']],
+        ['12시', val['t12']],
+        ['',     val['t13']],
+        ['14시', val['t14']],
+        ['',     val['t15']],
+        ['16시', val['t16']],
+        ['',     val['t17']],
+        ['18시', val['t18']],
+        ['',     val['t19']],
+        ['20시', val['t20']],
+        ['',     val['t21']],
+        ['22시', val['t22']],
+        ['',     val['t23']]
       ]);
 
       var options = {
