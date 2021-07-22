@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.logi.weather.db.mapper.WeatherMapper">
+    <select id="getAll" resultType="com.logi.weather.dto.Weather">
+        SELECT * FROM WeatherHourlyData order by inputdatetime,dataType;
+    </select>
+
+    <update id="mergeWeather" parameterType="com.logi.weather.dto.MergeWeather">
+        MERGE INTO WeatherHourlyData
+        USING (SELECT 1 AS DUM) X
+        ON (inputdatetime = #{inputdatetime} and dataType=#{dataType} and inputdatetime=#{inputdatetime})
+        WHEN MATCHED THEN
+        UPDATE SET ${baseTime}=#{value}
+        WHEN NOT MATCHED THEN
+        INSERT (dataType, inputdatetime, ${baseTime})
+        VALUES(#{dataType}, #{inputdatetime}, #{value});
+    </update>
+
+</mapper>

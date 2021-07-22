@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>빼앰스</title>
+
+  <link rel="stylesheet" type="text/css" href="css/mainCss.css">
+
+  <!-- Google Chart -->
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+  <!-- Jq Grid -->
+  <link rel="stylesheet" href="css/jquery-ui.css">
+  <link rel="stylesheet" href="css/ui.jqgrid.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>  
+  <script>
+    $.jgrid = $.jgrid || {};
+    $.jgrid.no_legacy_api = true;
+    $.jgrid.useJSON = true;
+  </script>
+  <script src="js/jquery.jqgrid.src.js"></script>
+
+  <script type="text/javascript">
+
+    window.onload = function() {
+      document.getElementById('dateSelect').valueAsDate = new Date();
+    }
+
+    $(function() {
+      $('#typeSelect').on('change', function() {
+        var dataType = $("#typeSelect option:selected").val();
+        var selectDate = $("#dateSelect").val();
+        var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
+
+        $.ajax({
+          type: "get",
+          url: "logi/weatherData",
+          dataType: "JSON",
+          contentType: "application/json; charset=utf-8",
+          data : {"data" : dataTemp},
+
+          success: function (data) {
+            alert("success!!!")
+          },
+          error: function () {
+            alert("해당하는 날의 데이터가 없습니다!");
+          }
+        })
+      })
+    }) 
+
+    $(function() {
+      $('#dateSelect').on('change', function() {
+        var dataType = $("#typeSelect option:selected").val();
+        var selectDate = $("#dateSelect").val();
+        var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
+
+        $.ajax({
+          type: "get",
+          url: "logi/weatherData",
+          dataType: "JSON",
+          contentType: "application/json; charset=utf-8",
+          data : {"data" : dataTemp},
+
+          success: function (data) {
+            alert("success!!!")
+          },
+          error: function () {
+            alert("해당하는 날의 데이터가 없습니다!");
+          }
+        })
+      })
+    }) 
+
+    //<!-- Jq Grid -->
+    $(function () {
+      "use strict";
+      $("#list").jqGrid({
+        colModel: [
+          { name: "시간" },
+          { name: "온도" }
+        ],
+        data: [
+          { id: 10, 시간: "0시", 온도: "26" },
+          { id: 20, 시간: "1시", 온도: "25" },
+          { id: 30, 시간: "2시", 온도: "25" },
+          { id: 40, 시간: "3시", 온도: "25" },
+          { id: 50, 시간: "4시", 온도: "25" },
+          { id: 60, 시간: "5시", 온도: "25" },
+          { id: 70, 시간: "6시", 온도: "25" },
+          { id: 80, 시간: "7시", 온도: "26" },
+          { id: 90, 시간: "8시", 온도: "27" },
+          { id: 100, 시간: "9시", 온도: "28" },
+          { id: 110, 시간: "10시", 온도: "29" },
+          { id: 120, 시간: "11시", 온도: "30" },
+          { id: 130, 시간: "12시", 온도: "31" },
+          { id: 140, 시간: "13시", 온도: "31" },
+          { id: 150, 시간: "14시", 온도: "31" },
+          { id: 160, 시간: "15시", 온도: "31" },
+          { id: 170, 시간: "16시", 온도: "31" },
+          { id: 180, 시간: "17시", 온도: "30" },
+          { id: 190, 시간: "18시", 온도: "30" },
+          { id: 200, 시간: "19시", 온도: "29" },
+          { id: 210, 시간: "20시", 온도: "27" },
+          { id: 220, 시간: "21시", 온도: "26" },
+          { id: 230, 시간: "22시", 온도: "26" },
+          { id: 240, 시간: "23시", 온도: "26" }
+        ]
+      });
+    });
+
+    //<!-- Google Chart -->
+    google.load("visualization", "1", { packages: ["corechart"] });
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Time', '온도'],
+        ['0시', 26],
+        ['', 25],
+        ['2시', 25],
+        ['', 25],
+        ['4시', 25],
+        ['', 25],
+        ['6시', 25],
+        ['', 26],
+        ['8시', 27],
+        ['', 28],
+        ['10시', 29],
+        ['', 30],
+        ['12시', 31],
+        ['', 31],
+        ['14시', 31],
+        ['', 31],
+        ['16시', 31],
+        ['', 30],
+        ['18시', 30],
+        ['', 29],
+        ['20시', 27],
+        ['', 26],
+        ['22시', 26],
+        ['', 26]
+      ]);
+
+      var options = {
+        title: '온·습도 그래프'
+      };
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+      chart.draw(data, options);
+    }
+  </script>
+
+</head>
+
+<body>
+
+  <div id="wrap">
+    <div id="mainText">
+      <h1>로지시스템 신입사원 프로젝트(시간별 온·습도 예측값)</h1>
+    </div>
+
+    <!-- Jq Grid -->
+    <div id="outerDiv" style="margin: 5px;">
+      <table id="list"></table>
+    </div>
+
+    <div id="selectArea">
+      <input type="date" id="dateSelect">
+      <select name="typeSelect" id="typeSelect">
+        <option value="온도">온도</option>
+        <option value="습도">습도</option>
+      </select>
+    </div>
+
+    <!-- Google Chart -->
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </div>
+
+</body>
+
+</html>
