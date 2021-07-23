@@ -153,7 +153,7 @@ public class WeatherService {
       String inputDateTime = simpleDateFormat.format(list.get(i).getInputdatetime());
 
       if(String.valueOf(chooseDataType).equals(dataType) && chooseDate.equals(inputDateTime)) {
-        System.out.println(dataType + " " + inputDateTime);
+        System.out.println(inputDateTime + " " + dataType);
         returnData = list.get(i);
       }
     }

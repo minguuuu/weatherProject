@@ -35,6 +35,8 @@
         var selectDate = $("#dateSelect").val();
         var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
 
+        $('#reloadDiv').load(document.URL+' #outerDiv');
+
         $.ajax({
           type: "get",
           url: "logi/weatherData",
@@ -43,9 +45,19 @@
           data : {"data" : dataTemp},
 
           success: function (result) {
-            drawGrid(result);
-            drawChart(result);
-            //alert(result['inputdatetime'] + "       " + result['dataType'] + "       " + result['t01']);
+            Object.keys(result).forEach(key => {
+              if(result[key] == 0) {
+                result[key] = null;
+              }
+            });
+            var dataTypeName = "";
+            if(result["dataType"]==1){
+              dataTypeName = "온도";
+            } else {
+              dataTypeName = "습도";
+            }
+            drawGrid(result, dataTypeName);
+            drawChart(result, dataTypeName);
           },
           error: function () {
             alert("해당하는 날의 데이터가 없습니다!");
@@ -55,39 +67,37 @@
     });
 
     //<!-- Jq Grid -->
-    function drawGrid(val) {
-      "use strict";
-      alert(JSON.stringify(val));
+    function drawGrid(val, dataTypeName) {
       $("#list").jqGrid({
         colModel: [
           { name: "시간" },
-          { name: "온도" }
+          { name: dataTypeName }
         ],
         data: [
-          { 시간: "0시", 온도: val['t00'] },
-          { 시간: "1시", 온도: val['t01'] },
-          { 시간: "2시", 온도: val['t02'] },
-          { 시간: "3시", 온도: val['t03'] },
-          { 시간: "4시", 온도: val['t04'] },
-          { 시간: "5시", 온도: val['t05'] },
-          { 시간: "6시", 온도: val['t06'] },
-          { 시간: "7시", 온도: val['t07'] },
-          { 시간: "8시", 온도: val['t08'] },
-          { 시간: "9시", 온도: val['t09'] },
-          { 시간: "10시", 온도: val['t10'] },
-          { 시간: "11시", 온도: val['t11'] },
-          { 시간: "12시", 온도: val['t12'] },
-          { 시간: "13시", 온도: val['t13'] },
-          { 시간: "14시", 온도: val['t14'] },
-          { 시간: "15시", 온도: val['t15'] },
-          { 시간: "16시", 온도: val['t16'] },
-          { 시간: "17시", 온도: val['t17'] },
-          { 시간: "18시", 온도: val['t18'] },
-          { 시간: "19시", 온도: val['t19'] },
-          { 시간: "20시", 온도: val['t20'] },
-          { 시간: "21시", 온도: val['t21'] },
-          { 시간: "22시", 온도: val['t22'] },
-          { 시간: "23시", 온도: val['t23'] }
+          { 시간: "0시", 온도: val['t00'], 습도: val['t00'] },
+          { 시간: "1시", 온도: val['t01'], 습도: val['t01'] },
+          { 시간: "2시", 온도: val['t02'], 습도: val['t02'] },
+          { 시간: "3시", 온도: val['t03'], 습도: val['t03'] },
+          { 시간: "4시", 온도: val['t04'], 습도: val['t04'] },
+          { 시간: "5시", 온도: val['t05'], 습도: val['t05'] },
+          { 시간: "6시", 온도: val['t06'], 습도: val['t06'] },
+          { 시간: "7시", 온도: val['t07'], 습도: val['t07'] },
+          { 시간: "8시", 온도: val['t08'], 습도: val['t08'] },
+          { 시간: "9시", 온도: val['t09'], 습도: val['t09'] },
+          { 시간: "10시", 온도: val['t10'], 습도: val['t10'] },
+          { 시간: "11시", 온도: val['t11'], 습도: val['t11'] },
+          { 시간: "12시", 온도: val['t12'], 습도: val['t12'] },
+          { 시간: "13시", 온도: val['t13'], 습도: val['t13'] },
+          { 시간: "14시", 온도: val['t14'], 습도: val['t14'] },
+          { 시간: "15시", 온도: val['t15'], 습도: val['t15'] },
+          { 시간: "16시", 온도: val['t16'], 습도: val['t16'] },
+          { 시간: "17시", 온도: val['t17'], 습도: val['t17'] },
+          { 시간: "18시", 온도: val['t18'], 습도: val['t18'] },
+          { 시간: "19시", 온도: val['t19'], 습도: val['t19'] },
+          { 시간: "20시", 온도: val['t20'], 습도: val['t20'] },
+          { 시간: "21시", 온도: val['t21'], 습도: val['t21'] },
+          { 시간: "22시", 온도: val['t22'], 습도: val['t22'] },
+          { 시간: "23시", 온도: val['t23'], 습도: val['t23'] }
         ]
       });
     }
@@ -95,9 +105,9 @@
     //<!-- Google Chart -->
     google.load("visualization", "1", { packages: ["corechart"] });
     google.setOnLoadCallback(drawChart);
-    function drawChart(val) {
+    function drawChart(val, dataTypeName) {
       var data = google.visualization.arrayToDataTable([
-        ['Time', '온도'],
+        ['Time', dataTypeName],
         ['0시',  val['t00']],
         ['',     val['t01']],
         ['2시',  val['t02']],
@@ -125,7 +135,7 @@
       ]);
 
       var options = {
-        title: '온·습도 그래프'
+        title: dataTypeName+' 그래프'
       };
       var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
       chart.draw(data, options);
@@ -142,8 +152,10 @@
     </div>
 
     <!-- Jq Grid -->
-    <div id="outerDiv" style="margin: 5px;">
-      <table id="list"></table>
+    <div id="reloadDiv">
+      <div id="outerDiv" style="margin: 5px;">
+        <table id="list"></table>
+      </div>
     </div>
 
     <div id="selectArea">

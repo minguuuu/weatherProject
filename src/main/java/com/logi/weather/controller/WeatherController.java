@@ -42,7 +42,6 @@ public class WeatherController {
     String chooseData = request.getParameter("data");
 
     Weather returnData = weatherService.chooseData(chooseData);
-    System.out.println("returnData : " + returnData.toString());
     
     return returnData;
   }
