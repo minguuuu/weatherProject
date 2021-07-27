@@ -45,4 +45,9 @@ public class WeatherController {
     
     return returnData;
   }
+
+  @RequestMapping(value = "/update")
+  public void weatherUpdate() {
+
+  }
 }

@@ -26,52 +26,65 @@
   <script type="text/javascript">
 
     window.onload = function() {
+      nowDateData();
+    }
+
+    function nowDateData() {
       document.getElementById('dateSelect').valueAsDate = new Date();
+      weatherData();
     }
 
     $(function() {
       $('#selectArea').on('change', function() {
-        var dataType = $("#typeSelect option:selected").val();
-        var selectDate = $("#dateSelect").val();
-        var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
-
-        $('#reloadDiv').load(document.URL+' #outerDiv');
-
-        $.ajax({
-          type: "get",
-          url: "logi/weatherData",
-          dataType: "JSON",
-          contentType: "application/json; charset=utf-8",
-          data : {"data" : dataTemp},
-
-          success: function (result) {
-            Object.keys(result).forEach(key => {
-              if(result[key] == 0) {
-                result[key] = null;
-              }
-            });
-            var dataTypeName = "";
-            if(result["dataType"]==1){
-              dataTypeName = "온도";
-            } else {
-              dataTypeName = "습도";
-            }
-            drawGrid(result, dataTypeName);
-            drawChart(result, dataTypeName);
-          },
-          error: function () {
-            alert("해당하는 날의 데이터가 없습니다!");
-          }
-        })
+        weatherData();
       })
     });
+
+    function weatherData() {
+      var dataType = $("#typeSelect option:selected").val();
+      var selectDate = $("#dateSelect").val();
+      var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
+
+      $('#reloadDiv').load(document.URL+' #outerDiv');
+
+      $.ajax({
+        type: "get",
+        url: "logi/weatherData",
+        dataType: "JSON",
+        contentType: "application/json; charset=utf-8",
+        data: { "data": dataTemp },
+        success: function (result) {
+          Object.keys(result).forEach(key => {
+            if (result[key] == 0) {
+              result[key] = null;
+            }
+          });
+          var dataTypeName = "";
+          if (result["dataType"] == 1) {
+            dataTypeName = "온도";
+          } else {
+            dataTypeName = "습도";
+          }
+          drawGrid(result, dataTypeName);
+          drawChart(result, dataTypeName);
+        },
+        error: function () {
+          alert("해당하는 날의 데이터가 없습니다!");
+          nowDateData();
+        }
+      })
+    }
 
     //<!-- Jq Grid -->
     function drawGrid(val, dataTypeName) {
       $("#list").jqGrid({
+        cellEdit: true,
+        cellsubmit: 'remote',
+        cellurl: 'logi/update',
+
         colModel: [
           { name: "시간" },
-          { name: dataTypeName }
+          { name: dataTypeName, editable: true }
         ],
         data: [
           { 시간: "0시", 온도: val['t00'], 습도: val['t00'] },
