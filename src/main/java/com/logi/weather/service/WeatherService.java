@@ -184,7 +184,6 @@ public class WeatherService {
 
     DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Date date = null;
-
     try {
       date = dateFormat.parse(editDate);
     } catch(ParseException e) {
@@ -198,7 +197,7 @@ public class WeatherService {
 
     System.out.println(editDateTemp + " " + dataTypeTemp + " " + valueTemp + " " + editTime);
 
-    EditCell editCell = new EditCell(editDate, dataTypeTemp, valueTemp, editTime);
+    EditCell editCell = new EditCell(editDateTemp, dataTypeTemp, valueTemp, editTime);
 
     weatherMapper.cellEdit(editCell);
   }

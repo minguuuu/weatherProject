@@ -81,25 +81,6 @@
       var editDate = val["inputdatetime"];
 
       $("#list").jqGrid({
-        cellEdit: true,
-        cellsubmit: 'remote',
-        cellurl: 'logi/update',
-
-        beforeSubmitCell: function(rowid, cellName, value, iRow) {
-          return { "cellName" : cellName, "value" : value, "rowDate" : editDate, "iRow" : iRow};
-        },
-
-        afterSubmitCell: function(res) {
-          var aResult = $.parseJSON(res.responseText);
-          var userMsg = "";
-
-          if(!(aResult.msg == "success")) {
-            userMsg = "오류발생 삐용삐용";
-          }
-          
-          return [(aResult.msg == "success") ? true : false, userMsg];
-        },
-
         colModel: [
           { name: "시간" },
           { name: dataTypeName, editable: true }
@@ -129,7 +110,20 @@
           { 시간: "21시", 온도: val['t21'], 습도: val['t21'] },
           { 시간: "22시", 온도: val['t22'], 습도: val['t22'] },
           { 시간: "23시", 온도: val['t23'], 습도: val['t23'] }
-        ]
+        ],
+
+        cellEdit: true,
+        cellsubmit: 'remote',
+        cellurl: 'logi/update',
+
+        beforeSubmitCell: function(rowid, cellName, value, iRow) {
+          return { "cellName" : cellName, "value" : value, "rowDate" : editDate, "iRow" : iRow};
+        },
+
+        afterSaveCell: function() {
+          // jQuery("#ist").trigger("reloadGrid");
+          weatherData();
+        }
       });
     }
 
