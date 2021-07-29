@@ -23,5 +23,5 @@
         where inputdatetime=#{editDate}
         and dataType=${dataType}
     </update>
-
+    
 </mapper>

@@ -10,7 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface WeatherMapper {
-
   public List<Weather> getAll() throws Exception;
   public int mergeWeather(MergeWeather mergeWeather) throws Exception;
   public void cellEdit(EditCell editCell) throws Exception;

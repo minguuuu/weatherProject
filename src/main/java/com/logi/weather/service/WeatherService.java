@@ -193,9 +193,6 @@ public class WeatherService {
     cal.setTime(date);
     cal.add(Calendar.DATE, 1);
     String editDateTemp = dateFormat.format(cal.getTime());
-    
-
-    System.out.println(editDateTemp + " " + dataTypeTemp + " " + valueTemp + " " + editTime);
 
     EditCell editCell = new EditCell(editDateTemp, dataTypeTemp, valueTemp, editTime);
 

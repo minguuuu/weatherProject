@@ -53,8 +53,6 @@ public class WeatherController {
     String value = request.getParameter("value");
     String iRow = request.getParameter("iRow");
 
-    // String cellEditDate = editDate.substring(0, 10);
-
     weatherService.editCell(editDate, cellName, value, iRow);
 
     return "success";

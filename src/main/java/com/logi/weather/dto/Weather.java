@@ -10,8 +10,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Weather {
   private int sid;
   private Date inputdatetime;
