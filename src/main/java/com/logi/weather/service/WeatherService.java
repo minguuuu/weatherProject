@@ -1,14 +1,18 @@
 package com.logi.weather.service;
 
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.logi.weather.db.mapper.WeatherMapper;
+import com.logi.weather.dto.EditCell;
 import com.logi.weather.dto.MergeWeather;
 import com.logi.weather.dto.Weather;
 
@@ -153,11 +157,50 @@ public class WeatherService {
       String inputDateTime = simpleDateFormat.format(list.get(i).getInputdatetime());
 
       if(String.valueOf(chooseDataType).equals(dataType) && chooseDate.equals(inputDateTime)) {
-        System.out.println(inputDateTime + " " + dataType);
+        // System.out.println(inputDateTime + " " + dataType);
         returnData = list.get(i);
       }
     }
 
     return returnData;
   }
+
+  public void editCell(String editDate, String dataType, String value, String iRow) throws Exception {
+    int dataTypeTemp;
+    if(dataType.equals("온도")) {
+      dataTypeTemp = 1;
+    } else {
+      dataTypeTemp = 2;
+    }
+    float valueTemp = Float.parseFloat(value+".0000");
+    int timeTemp = Integer.parseInt(iRow)-1;
+    String editTime = "";
+
+    if(timeTemp < 10) {
+      editTime = "T0"+String.valueOf(timeTemp);
+    } else {
+      editTime = "T"+String.valueOf(timeTemp);
+    }
+
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    Date date = null;
+
+    try {
+      date = dateFormat.parse(editDate);
+    } catch(ParseException e) {
+      e.printStackTrace();
+    }
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+    cal.add(Calendar.DATE, 1);
+    String editDateTemp = dateFormat.format(cal.getTime());
+    
+
+    System.out.println(editDateTemp + " " + dataTypeTemp + " " + valueTemp + " " + editTime);
+
+    EditCell editCell = new EditCell(editDate, dataTypeTemp, valueTemp, editTime);
+
+    weatherMapper.cellEdit(editCell);
+  }
+
 }

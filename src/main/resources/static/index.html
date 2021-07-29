@@ -30,7 +30,8 @@
     }
 
     function nowDateData() {
-      document.getElementById('dateSelect').valueAsDate = new Date();
+      var nowDate = new Date();
+      document.getElementById('dateSelect').valueAsDate = nowDate;
       weatherData();
     }
 
@@ -77,10 +78,27 @@
 
     //<!-- Jq Grid -->
     function drawGrid(val, dataTypeName) {
+      var editDate = val["inputdatetime"];
+
       $("#list").jqGrid({
         cellEdit: true,
         cellsubmit: 'remote',
         cellurl: 'logi/update',
+
+        beforeSubmitCell: function(rowid, cellName, value, iRow) {
+          return { "cellName" : cellName, "value" : value, "rowDate" : editDate, "iRow" : iRow};
+        },
+
+        afterSubmitCell: function(res) {
+          var aResult = $.parseJSON(res.responseText);
+          var userMsg = "";
+
+          if(!(aResult.msg == "success")) {
+            userMsg = "오류발생 삐용삐용";
+          }
+          
+          return [(aResult.msg == "success") ? true : false, userMsg];
+        },
 
         colModel: [
           { name: "시간" },

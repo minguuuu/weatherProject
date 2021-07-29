@@ -40,14 +40,23 @@ public class WeatherController {
   @RequestMapping(value = "/weatherData", method = RequestMethod.GET)
   public Weather weatherData(HttpServletRequest request) throws Exception {
     String chooseData = request.getParameter("data");
-
+    
     Weather returnData = weatherService.chooseData(chooseData);
     
     return returnData;
   }
 
   @RequestMapping(value = "/update")
-  public void weatherUpdate() {
+  public String cellEdit(HttpServletRequest request) throws Exception {
+    String editDate = request.getParameter("rowDate");
+    String cellName = request.getParameter("cellName");
+    String value = request.getParameter("value");
+    String iRow = request.getParameter("iRow");
 
+    // String cellEditDate = editDate.substring(0, 10);
+
+    weatherService.editCell(editDate, cellName, value, iRow);
+
+    return "success";
   }
 }
