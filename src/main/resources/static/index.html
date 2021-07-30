@@ -5,14 +5,6 @@
   <meta charset="utf-8">
   <title>빼앰스</title>
 
-  <link rel="stylesheet" type="text/css" href="css/mainCss.css">
-
-  <!-- Google Chart -->
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
-  <!-- SweetAlert -->
-  <script src="js/sweetalert.min.js"></script>
-
   <!-- Jq Grid -->
   <link rel="stylesheet" href="css/jquery-ui.css">
   <link rel="stylesheet" href="css/ui.jqgrid.css">
@@ -26,6 +18,19 @@
   </script>
   <script src="js/jquery.jqgrid.src.js"></script>
 
+  <!-- Google Chart -->
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+  <!-- SweetAlert -->
+  <script src="js/sweetalert.min.js"></script>
+
+  <!-- table2excel -->
+  <script src="js/jquery.table2excel.js"></script>
+  <script src="js/jquery.table2excel.min.js"></script>
+
+  <!-- User CSS -->
+  <link rel="stylesheet" type="text/css" href="css/mainCss.css">
+
 
   <script type="text/javascript">
 
@@ -33,9 +38,15 @@
       nowDateData();
     }
 
+    //<!-- default date setting -->
     function nowDateData() {
-      var nowDate = new Date();
-      document.getElementById('dateSelect').valueAsDate = nowDate;
+      Date.prototype.toDateInputValue = (function() {
+        var local = new Date(this);
+        local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+        return local.toJSON().slice(0,10);
+      });
+      var nowDate = new Date().toDateInputValue();
+      document.getElementById('dateSelect').value = nowDate;
       weatherData();
     }
 
@@ -74,7 +85,7 @@
           drawChart(result, dataTypeName);
         },
         error: function () {
-          swal("해당하는 날의 데이터가 없습니다!");
+          swal("해당하는 날의 데이터가 없습니다!", "", "error");
           nowDateData();
         }
       })
@@ -84,10 +95,40 @@
     function drawGrid(val, dataTypeName) {
       var editDate = val["inputdatetime"];
 
+      //<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+      $("#list").jqGrid('navButtonAdd','#dept_table_nav',{
+        caption:"출력",
+        title : "출력",
+        onClickButton : function(e){
+          $("#list").table2excel({
+            exclude : ".noExl",
+            name : "weather",
+            filename : "weatjer",
+            fileext : ".xls",
+            exclude_img : true,
+            exclude_links : true,
+            exclude_inputs : true
+          });
+        }
+      });
+
       $("#list").jqGrid({
         colModel: [
           { name: "시간", sortable: false },
-          { name: dataTypeName, editable: true, sortable: false }
+          { name: dataTypeName, editable: true, sortable: false, editoptions: {
+              size: 15, maxlengh: 10,
+              dataInit: function (element) {
+                $(element).keyup(function () {
+                  var val1 = element.value;
+                  var num = new Number(val1);
+                  if (isNaN(num)) {
+                    swal("잘못 입력하셨습니다", "숫자만 입력 가능합니다", "error");
+                    element.value = '';
+                  }
+                })
+              }
+            }
+          }
         ],
         data: [
           { 시간: "0시", 온도: val['t00'], 습도: val['t00'] },
@@ -131,7 +172,7 @@
         },
 
         errorCell: function() {
-          swal("잘못 입력하셨습니다", "숫자만 입력 가능", "error");
+          swal("Error", "", "error");
         }
       });
     }
