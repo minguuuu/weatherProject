@@ -24,9 +24,8 @@
   <!-- SweetAlert -->
   <script src="js/sweetalert.min.js"></script>
 
-  <!-- table2excel -->
-  <script src="js/jquery.table2excel.js"></script>
-  <script src="js/jquery.table2excel.min.js"></script>
+  <!-- exportToExcel -->
+  <script src="js/jszip.min.js"></script>
 
   <!-- User CSS -->
   <link rel="stylesheet" type="text/css" href="css/mainCss.css">
@@ -91,26 +90,21 @@
       })
     }
 
+    //<!-- export excel -->
+    function excelButtonEvent() {
+      swal("test");
+      $("#list").jqGrid("exportToExcel",{
+				includeLabels : true,
+				includeGroupHeader : true,
+				includeFooter: true,
+				fileName : "jqGridExport.xlsx",
+				maxlength : 40 // maxlength for visible string data 
+			})
+    }
+
     //<!-- Jq Grid -->
     function drawGrid(val, dataTypeName) {
       var editDate = val["inputdatetime"];
-
-      //<!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
-      $("#list").jqGrid('navButtonAdd','#dept_table_nav',{
-        caption:"출력",
-        title : "출력",
-        onClickButton : function(e){
-          $("#list").table2excel({
-            exclude : ".noExl",
-            name : "weather",
-            filename : "weatjer",
-            fileext : ".xls",
-            exclude_img : true,
-            exclude_links : true,
-            exclude_inputs : true
-          });
-        }
-      });
 
       $("#list").jqGrid({
         colModel: [
@@ -240,6 +234,7 @@
         <option value="온도">온도</option>
         <option value="습도">습도</option>
       </select>
+      <input type="button" id="export" onclick="excelButtonEvent()" value="엑셀 다운받기">
     </div>
 
     <!-- Google Chart -->

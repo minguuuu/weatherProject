@@ -41,3 +41,11 @@
   height: 34px;
   width: 80px;
 }
+
+#export{
+  border: 1.5px solid black;
+  margin-left: 180px;
+  height: 35px;
+  width: 200px;
+  background-color: white;
+}
