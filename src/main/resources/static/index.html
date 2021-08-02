@@ -11,12 +11,14 @@
   <link rel="stylesheet" href="css/font-awesome.min.css">
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-ui.min.js"></script>  
+    
   <script>
     $.jgrid = $.jgrid || {};
     $.jgrid.no_legacy_api = true;
     $.jgrid.useJSON = true;
   </script>
   <script src="js/jquery.jqgrid.src.js"></script>
+  <script src="js/jquery.jqGrid.min.js"></script>
 
   <!-- Google Chart -->
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -92,9 +94,9 @@
 
     //<!-- export excel -->
     function excelButtonEvent() {
-      swal("test");
+      //swal("test");
       $("#list").jqGrid("exportToExcel",{
-				includeLabels : true,
+      	includeLabels : true,
 				includeGroupHeader : true,
 				includeFooter: true,
 				fileName : "jqGridExport.xlsx",
