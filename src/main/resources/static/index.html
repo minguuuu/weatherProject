@@ -3,21 +3,48 @@
 
 <head>
   <meta charset="utf-8">
-  <title>빼앰스</title>
+  <title>신입사원 프로젝트</title>
+</head>
+
+<body>
+
+  <div id="wrap">
+    <div id="mainText">
+      <h1>로지시스템 신입사원 프로젝트(시간별 온·습도 예측값)</h1>
+    </div>
+
+    <!-- Jq Grid -->
+    <div id="reloadDiv">
+      <div id="outerDiv" style="margin: 5px;">
+        <table id="list"></table>
+      </div>
+    </div>
+
+    <!-- select box -->
+    <div id="selectArea">
+      <input type="date" id="dateSelect">
+      <select name="typeSelect" id="typeSelect">
+        <option value="온도">온도</option>
+        <option value="습도">습도</option>
+      </select>
+      <input type="button" id="export" onclick="excelButtonEvent()" value="엑셀 다운받기">
+    </div>
+
+    <!-- Google Chart -->
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </div>
 
   <!-- Jq Grid -->
   <link rel="stylesheet" href="css/jquery-ui.css">
-  <link rel="stylesheet" href="css/ui.jqgrid.css">
+  <link rel="stylesheet" href="css/ui.jqgrid.css?test=6">
   <script src="js/grid.locale-kr.js"></script>
   <script src="js/jquery.min.js"></script>
-  <script src="js/jquery.jqGrid.min.js"></script>
-  <!-- <script src="js/jquery-ui.min.js"></script>   -->
+  <script src="js/jquery.jqGrid.min.js"></script>  
   <script>
     $.jgrid = $.jgrid || {};
     $.jgrid.no_legacy_api = true;
     $.jgrid.useJSON = true;
   </script>
-  <!-- <script src="js/jquery.jqgrid.src.js"></script> -->
 
   <!-- Google Chart -->
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -29,7 +56,7 @@
   <script src="js/jszip.min.js"></script>
 
   <!-- User CSS -->
-  <link rel="stylesheet" type="text/css" href="css/mainCss.css">
+  <link rel="stylesheet" type="text/css" href="css/mainCss.css?test=3">
 
 
   <script type="text/javascript">
@@ -106,26 +133,7 @@
     //<!-- Jq Grid -->
     function drawGrid(gridValue, girdDataTypeName) {
       var editDate = gridValue["inputdatetime"];
-
-      $("#list").jqGrid({
-        colModel: [
-          { name: "시간", sortable: false },
-          { name: girdDataTypeName, editable: true, sortable: false, editoptions: {
-              size: 15, maxlengh: 10,
-              dataInit: function (element) {
-                $(element).keyup(function () {
-                  var val1 = element.value;
-                  var num = new Number(val1);
-                  if (isNaN(num)) {
-                    swal("잘못 입력하셨습니다", "숫자만 입력 가능합니다", "error");
-                    element.value = '';
-                  }
-                })
-              }
-            }
-          }
-        ],
-        data: [
+      var myData = [
           { 시간: "0시", 온도: gridValue['t00'], 습도: gridValue['t00'] },
           { 시간: "1시", 온도: gridValue['t01'], 습도: gridValue['t01'] },
           { 시간: "2시", 온도: gridValue['t02'], 습도: gridValue['t02'] },
@@ -150,8 +158,29 @@
           { 시간: "21시", 온도: gridValue['t21'], 습도: gridValue['t21'] },
           { 시간: "22시", 온도: gridValue['t22'], 습도: gridValue['t22'] },
           { 시간: "23시", 온도: gridValue['t23'], 습도: gridValue['t23'] }
+        ]
+      $("#list").jqGrid({
+        scrollOffset : 0,
+        rowNum: 50,
+        datatype: 'local',
+        data: myData,
+        colModel: [
+          { name: "시간", sortable: false },
+          { name: girdDataTypeName, editable: true, sortable: false, editoptions: {
+              size: 15, maxlengh: 10,
+              dataInit: function (element) {
+                $(element).keyup(function () {
+                  var val1 = element.value;
+                  var num = new Number(val1);
+                  if (isNaN(num)) {
+                    swal("잘못 입력하셨습니다", "숫자만 입력 가능합니다", "error");
+                    element.value = '';
+                  }
+                })
+              }
+            }
+          }
         ],
-        caption: 'test',
 
         // cellEdit
         cellEdit: true,
@@ -160,6 +189,12 @@
 
         beforeSubmitCell: function(rowid, cellName, value, iRow) {
           return { "cellName" : cellName, "value" : value, "rowDate" : editDate, "iRow" : iRow};
+        },
+      
+        afterEditCell:function(rowid, cellname, value, iRow, iCol){
+          $("#"+rowid+"_"+cellname).blur(function(){
+            $("#list").jqGrid("saveCell",iRow,iCol);
+          });
         },
 
         afterSaveCell: function() {
@@ -212,37 +247,7 @@
       chart.draw(data, options);
     }
   </script>
-
-</head>
-
-<body>
-
-  <div id="wrap">
-    <div id="mainText">
-      <h1>로지시스템 신입사원 프로젝트(시간별 온·습도 예측값)</h1>
-    </div>
-
-    <!-- Jq Grid -->
-    <div id="reloadDiv">
-      <div id="outerDiv" style="margin: 5px;">
-        <table id="list"></table>
-      </div>
-    </div>
-
-    <!-- select box -->
-    <div id="selectArea">
-      <input type="date" id="dateSelect">
-      <select name="typeSelect" id="typeSelect">
-        <option value="온도">온도</option>
-        <option value="습도">습도</option>
-      </select>
-      <input type="button" id="export" onclick="excelButtonEvent()" value="엑셀 다운받기">
-    </div>
-
-    <!-- Google Chart -->
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
-  </div>
-
+  
 </body>
 
 </html>
