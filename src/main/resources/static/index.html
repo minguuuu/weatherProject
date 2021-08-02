@@ -8,17 +8,16 @@
   <!-- Jq Grid -->
   <link rel="stylesheet" href="css/jquery-ui.css">
   <link rel="stylesheet" href="css/ui.jqgrid.css">
-  <link rel="stylesheet" href="css/font-awesome.min.css">
+  <script src="js/grid.locale-kr.js"></script>
   <script src="js/jquery.min.js"></script>
-  <script src="js/jquery-ui.min.js"></script>  
-    
+  <script src="js/jquery.jqGrid.min.js"></script>
+  <!-- <script src="js/jquery-ui.min.js"></script>   -->
   <script>
     $.jgrid = $.jgrid || {};
     $.jgrid.no_legacy_api = true;
     $.jgrid.useJSON = true;
   </script>
-  <script src="js/jquery.jqgrid.src.js"></script>
-  <script src="js/jquery.jqGrid.min.js"></script>
+  <!-- <script src="js/jquery.jqgrid.src.js"></script> -->
 
   <!-- Google Chart -->
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -97,21 +96,21 @@
       //swal("test");
       $("#list").jqGrid("exportToExcel",{
       	includeLabels : true,
-				includeGroupHeader : true,
+        includeGroupHeader : true,
 				includeFooter: true,
-				fileName : "jqGridExport.xlsx",
+				fileName : "weather.xlsx",
 				maxlength : 40 // maxlength for visible string data 
 			})
     }
 
     //<!-- Jq Grid -->
-    function drawGrid(val, dataTypeName) {
-      var editDate = val["inputdatetime"];
+    function drawGrid(gridValue, girdDataTypeName) {
+      var editDate = gridValue["inputdatetime"];
 
       $("#list").jqGrid({
         colModel: [
           { name: "시간", sortable: false },
-          { name: dataTypeName, editable: true, sortable: false, editoptions: {
+          { name: girdDataTypeName, editable: true, sortable: false, editoptions: {
               size: 15, maxlengh: 10,
               dataInit: function (element) {
                 $(element).keyup(function () {
@@ -127,31 +126,32 @@
           }
         ],
         data: [
-          { 시간: "0시", 온도: val['t00'], 습도: val['t00'] },
-          { 시간: "1시", 온도: val['t01'], 습도: val['t01'] },
-          { 시간: "2시", 온도: val['t02'], 습도: val['t02'] },
-          { 시간: "3시", 온도: val['t03'], 습도: val['t03'] },
-          { 시간: "4시", 온도: val['t04'], 습도: val['t04'] },
-          { 시간: "5시", 온도: val['t05'], 습도: val['t05'] },
-          { 시간: "6시", 온도: val['t06'], 습도: val['t06'] },
-          { 시간: "7시", 온도: val['t07'], 습도: val['t07'] },
-          { 시간: "8시", 온도: val['t08'], 습도: val['t08'] },
-          { 시간: "9시", 온도: val['t09'], 습도: val['t09'] },
-          { 시간: "10시", 온도: val['t10'], 습도: val['t10'] },
-          { 시간: "11시", 온도: val['t11'], 습도: val['t11'] },
-          { 시간: "12시", 온도: val['t12'], 습도: val['t12'] },
-          { 시간: "13시", 온도: val['t13'], 습도: val['t13'] },
-          { 시간: "14시", 온도: val['t14'], 습도: val['t14'] },
-          { 시간: "15시", 온도: val['t15'], 습도: val['t15'] },
-          { 시간: "16시", 온도: val['t16'], 습도: val['t16'] },
-          { 시간: "17시", 온도: val['t17'], 습도: val['t17'] },
-          { 시간: "18시", 온도: val['t18'], 습도: val['t18'] },
-          { 시간: "19시", 온도: val['t19'], 습도: val['t19'] },
-          { 시간: "20시", 온도: val['t20'], 습도: val['t20'] },
-          { 시간: "21시", 온도: val['t21'], 습도: val['t21'] },
-          { 시간: "22시", 온도: val['t22'], 습도: val['t22'] },
-          { 시간: "23시", 온도: val['t23'], 습도: val['t23'] }
+          { 시간: "0시", 온도: gridValue['t00'], 습도: gridValue['t00'] },
+          { 시간: "1시", 온도: gridValue['t01'], 습도: gridValue['t01'] },
+          { 시간: "2시", 온도: gridValue['t02'], 습도: gridValue['t02'] },
+          { 시간: "3시", 온도: gridValue['t03'], 습도: gridValue['t03'] },
+          { 시간: "4시", 온도: gridValue['t04'], 습도: gridValue['t04'] },
+          { 시간: "5시", 온도: gridValue['t05'], 습도: gridValue['t05'] },
+          { 시간: "6시", 온도: gridValue['t06'], 습도: gridValue['t06'] },
+          { 시간: "7시", 온도: gridValue['t07'], 습도: gridValue['t07'] },
+          { 시간: "8시", 온도: gridValue['t08'], 습도: gridValue['t08'] },
+          { 시간: "9시", 온도: gridValue['t09'], 습도: gridValue['t09'] },
+          { 시간: "10시", 온도: gridValue['t10'], 습도: gridValue['t10'] },
+          { 시간: "11시", 온도: gridValue['t11'], 습도: gridValue['t11'] },
+          { 시간: "12시", 온도: gridValue['t12'], 습도: gridValue['t12'] },
+          { 시간: "13시", 온도: gridValue['t13'], 습도: gridValue['t13'] },
+          { 시간: "14시", 온도: gridValue['t14'], 습도: gridValue['t14'] },
+          { 시간: "15시", 온도: gridValue['t15'], 습도: gridValue['t15'] },
+          { 시간: "16시", 온도: gridValue['t16'], 습도: gridValue['t16'] },
+          { 시간: "17시", 온도: gridValue['t17'], 습도: gridValue['t17'] },
+          { 시간: "18시", 온도: gridValue['t18'], 습도: gridValue['t18'] },
+          { 시간: "19시", 온도: gridValue['t19'], 습도: gridValue['t19'] },
+          { 시간: "20시", 온도: gridValue['t20'], 습도: gridValue['t20'] },
+          { 시간: "21시", 온도: gridValue['t21'], 습도: gridValue['t21'] },
+          { 시간: "22시", 온도: gridValue['t22'], 습도: gridValue['t22'] },
+          { 시간: "23시", 온도: gridValue['t23'], 습도: gridValue['t23'] }
         ],
+        caption: 'test',
 
         // cellEdit
         cellEdit: true,
@@ -176,37 +176,37 @@
     //<!-- Google Chart -->
     google.load("visualization", "1", { packages: ["corechart"] });
     google.setOnLoadCallback(drawChart);
-    function drawChart(val, dataTypeName) {
+    function drawChart(chartValue, chartDataTypeName) {
       var data = google.visualization.arrayToDataTable([
-        ['Time', dataTypeName],
-        ['0시',  val['t00']],
-        ['',     val['t01']],
-        ['2시',  val['t02']],
-        ['',     val['t03']],
-        ['4시',  val['t04']],
-        ['',     val['t05']],
-        ['6시',  val['t06']],
-        ['',     val['t07']],
-        ['8시',  val['t08']],
-        ['',     val['t09']],
-        ['10시', val['t10']],
-        ['',     val['t11']],
-        ['12시', val['t12']],
-        ['',     val['t13']],
-        ['14시', val['t14']],
-        ['',     val['t15']],
-        ['16시', val['t16']],
-        ['',     val['t17']],
-        ['18시', val['t18']],
-        ['',     val['t19']],
-        ['20시', val['t20']],
-        ['',     val['t21']],
-        ['22시', val['t22']],
-        ['',     val['t23']]
+        ['Time', chartDataTypeName],
+        ['0시',  chartValue['t00']],
+        ['',     chartValue['t01']],
+        ['2시',  chartValue['t02']],
+        ['',     chartValue['t03']],
+        ['4시',  chartValue['t04']],
+        ['',     chartValue['t05']],
+        ['6시',  chartValue['t06']],
+        ['',     chartValue['t07']],
+        ['8시',  chartValue['t08']],
+        ['',     chartValue['t09']],
+        ['10시', chartValue['t10']],
+        ['',     chartValue['t11']],
+        ['12시', chartValue['t12']],
+        ['',     chartValue['t13']],
+        ['14시', chartValue['t14']],
+        ['',     chartValue['t15']],
+        ['16시', chartValue['t16']],
+        ['',     chartValue['t17']],
+        ['18시', chartValue['t18']],
+        ['',     chartValue['t19']],
+        ['20시', chartValue['t20']],
+        ['',     chartValue['t21']],
+        ['22시', chartValue['t22']],
+        ['',     chartValue['t23']]
       ]);
 
       var options = {
-        title: dataTypeName+' 그래프'
+        title: chartDataTypeName+' 그래프'
       };
       var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
       chart.draw(data, options);
