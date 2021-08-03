@@ -35,11 +35,11 @@
   </div>
 
   <!-- Jq Grid -->
-  <link rel="stylesheet" href="css/jquery-ui.css">
-  <link rel="stylesheet" href="css/ui.jqgrid.css?test=6">
-  <script src="js/grid.locale-kr.js"></script>
+  <link rel="stylesheet" href="css/jquery-ui.css?test=1">
+  <link rel="stylesheet" href="css/ui.jqgrid.css">
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.jqGrid.min.js"></script>  
+  <script src="js/grid.locale-kr.js"></script>
   <script>
     $.jgrid = $.jgrid || {};
     $.jgrid.no_legacy_api = true;
@@ -56,7 +56,7 @@
   <script src="js/jszip.min.js"></script>
 
   <!-- User CSS -->
-  <link rel="stylesheet" type="text/css" href="css/mainCss.css?test=3">
+  <link rel="stylesheet" type="text/css" href="css/mainCss.css">
 
 
   <script type="text/javascript">
@@ -112,7 +112,7 @@
           drawChart(result, dataTypeName);
         },
         error: function () {
-          swal("해당하는 날의 데이터가 없습니다!", "", "error");
+          swal("해당하는 날의 데이터가 없습니다!", "", "warning");
           nowDateData();
         }
       })
@@ -133,6 +133,7 @@
     //<!-- Jq Grid -->
     function drawGrid(gridValue, girdDataTypeName) {
       var editDate = gridValue["inputdatetime"];
+
       var myData = [
           { 시간: "0시", 온도: gridValue['t00'], 습도: gridValue['t00'] },
           { 시간: "1시", 온도: gridValue['t01'], 습도: gridValue['t01'] },
@@ -187,14 +188,14 @@
         cellsubmit: 'remote',
         cellurl: 'logi/update',
 
-        beforeSubmitCell: function(rowid, cellName, value, iRow) {
-          return { "cellName" : cellName, "value" : value, "rowDate" : editDate, "iRow" : iRow};
-        },
-      
         afterEditCell:function(rowid, cellname, value, iRow, iCol){
           $("#"+rowid+"_"+cellname).blur(function(){
             $("#list").jqGrid("saveCell",iRow,iCol);
           });
+        },
+        
+        beforeSubmitCell: function(rowid, cellName, value, iRow) {
+          return { "cellName" : cellName, "value" : value, "rowDate" : editDate, "iRow" : iRow};
         },
 
         afterSaveCell: function() {
@@ -203,7 +204,7 @@
         },
 
         errorCell: function() {
-          swal("Error", "", "error");
+          swal("잘못 입력하셨습니다", "숫자만 입력 가능합니다", "warning");
         }
       });
     }
