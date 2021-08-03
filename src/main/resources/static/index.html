@@ -47,7 +47,8 @@
   </script>
 
   <!-- Google Chart -->
-  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
   <!-- SweetAlert -->
   <script src="js/sweetalert.min.js"></script>
@@ -168,7 +169,6 @@
         colModel: [
           { name: "시간", sortable: false },
           { name: girdDataTypeName, editable: true, sortable: false, editoptions: {
-              size: 15, maxlengh: 10,
               dataInit: function (element) {
                 $(element).keyup(function () {
                   var val1 = element.value;
