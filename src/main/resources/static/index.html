@@ -35,7 +35,7 @@
   </div>
 
   <!-- Jq Grid -->
-  <link rel="stylesheet" href="css/jquery-ui.css?test=1">
+  <link rel="stylesheet" href="css/jquery-ui.css">
   <link rel="stylesheet" href="css/ui.jqgrid.css">
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.jqGrid.min.js"></script>  
@@ -86,7 +86,7 @@
     function weatherData() {
       var dataType = $("#typeSelect option:selected").val();
       var selectDate = $("#dateSelect").val();
-      var dataTemp = JSON.stringify({"dataType" : dataType, "selectDate" : selectDate});
+      var dataTemp = JSON.stringify({"dataType": dataType, "selectDate": selectDate});
 
       $('#reloadDiv').load(document.URL+' #outerDiv');
       
@@ -122,7 +122,7 @@
 
     // export excel
     function excelButtonEvent(date, dataType) {
-      $("#list").jqGrid("exportToExcel",{
+      $("#list").jqGrid("exportToExcel", {
       	includeLabels : true,
         includeGroupHeader : true,
 				includeFooter: true,
@@ -167,10 +167,10 @@
         datatype: 'local',
         data: myData,
         colModel: [
-          { name: "id", hidden: true, key: true},
+          { name: "id", hidden: true, key: true },
           { name: "시간", sortable: false },
           { name: girdDataTypeName, editable: true, sortable: false, editoptions: {
-              dataInit: function (element) {
+              dataInit: function(element) {
                 $(element).keyup(function () {
                   var val1 = element.value;
                   var num = new Number(val1);
@@ -189,8 +189,8 @@
         cellsubmit: 'remote',
         cellurl: 'logi/update',
 
-        afterEditCell:function(rowid, cellname, value, iRow, iCol){
-          $("#"+rowid+"_"+cellname).blur(function(){
+        afterEditCell:function(rowid, cellname, value, iRow, iCol) {
+          $("#" + rowid + "_" + cellname).blur(function() {
             $("#list").jqGrid("saveCell",iRow,iCol);
           });
         },
