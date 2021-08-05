@@ -27,7 +27,7 @@
         <option value="온도">온도</option>
         <option value="습도">습도</option>
       </select>
-      <input type="button" id="export" onclick="excelButtonEvent()" value="엑셀 다운받기">
+      <input type="button" id="export" onclick="excelButtonEvent(dateSelect.value, typeSelect.value)" value="엑셀 다운받기">
     </div>
 
     <!-- Google Chart -->
@@ -121,12 +121,12 @@
     }
 
     // export excel
-    function excelButtonEvent() {
+    function excelButtonEvent(date, dataType) {
       $("#list").jqGrid("exportToExcel",{
       	includeLabels : true,
         includeGroupHeader : true,
 				includeFooter: true,
-				fileName : "weather.xlsx",
+				fileName : date + " " + dataType + ".xlsx",
 				maxlength : 40 // maxlength for visible string data 
 			})
     }
