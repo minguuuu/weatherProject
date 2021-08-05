@@ -84,7 +84,7 @@
 
     // data setting
     function weatherData() {
-      var dataType = $("#typeSelect option:selected").val();
+      var dataType = $("#typeSelect").val();
       var selectDate = $("#dateSelect").val();
       var dataTemp = JSON.stringify({"dataType": dataType, "selectDate": selectDate});
 

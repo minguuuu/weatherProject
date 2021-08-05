@@ -49,7 +49,7 @@ public class WeatherService {
     String nowTime = LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute())
         .format(DateTimeFormatter.ofPattern("HHmm"));
     int nowTimeTemp = Integer.parseInt(nowTime);
-    
+
     Calendar cal = Calendar.getInstance();
     SimpleDateFormat Format = new SimpleDateFormat("YYYYMMdd");
     if(210 <= nowTimeTemp && nowTimeTemp < 510) {
@@ -136,7 +136,7 @@ public class WeatherService {
     return result;
   }
 
-  public Weather chooseData(String dataOption) throws Exception{
+  public Weather chooseData(String dataOption) throws Exception {
     List<Weather> list = weatherMapper.getAll();
     Weather returnData = null;
 
@@ -157,11 +157,9 @@ public class WeatherService {
       String inputDateTime = simpleDateFormat.format(list.get(i).getInputdatetime());
 
       if(String.valueOf(chooseDataType).equals(dataType) && chooseDate.equals(inputDateTime)) {
-        // System.out.println(inputDateTime + " " + dataType);
         returnData = list.get(i);
       }
     }
-
     return returnData;
   }
 
@@ -198,5 +196,4 @@ public class WeatherService {
 
     weatherMapper.cellEdit(editCell);
   }
-
 }

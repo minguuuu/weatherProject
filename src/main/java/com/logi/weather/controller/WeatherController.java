@@ -33,7 +33,7 @@ public class WeatherController {
   }
 
   @RequestMapping("/getAll")
-  public List<Weather> query() throws Exception{
+  public List<Weather> query() throws Exception {
     return weatherService.getAll();
   }
 
